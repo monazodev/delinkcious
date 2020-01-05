@@ -5,7 +5,7 @@ import (
 	"errors"
 	sq "github.com/Masterminds/squirrel"
 	_ "github.com/lib/pq"
-	"github.com/the-gigi/delinkcious/pkg/db_util"
+	"github.com/monazodev/delinkcious/pkg/db_util"
 )
 
 type DbSocialGraphStore struct {
@@ -38,15 +38,15 @@ func NewDbSocialGraphStore(host string, port int, username string, password stri
 
 func createSchema(db *sql.DB) (err error) {
 	schema := `
-        CREATE TABLE IF NOT EXISTS social_graph (
-          id SERIAL   PRIMARY KEY,
-		  followed    TEXT NOT NULL,
-          follower 	  TEXT NOT NULL,
-		  UNIQUE (followed, follower)
-        );
+				CREATE TABLE IF NOT EXISTS social_graph (
+					id SERIAL   PRIMARY KEY,
+			followed    TEXT NOT NULL,
+					follower		TEXT NOT NULL,
+			UNIQUE (followed, follower)
+				);
 		CREATE INDEX IF NOT EXISTS social_graph_follower_idx ON social_graph(follower);
 		CREATE INDEX IF NOT EXISTS social_graph_followed_idx ON social_graph(followed);
-    `
+		`
 
 	_, err = db.Exec(schema)
 	return

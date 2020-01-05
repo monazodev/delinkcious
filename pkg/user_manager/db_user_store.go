@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	sq "github.com/Masterminds/squirrel"
 	_ "github.com/lib/pq"
-	"github.com/the-gigi/delinkcious/pkg/db_util"
-	om "github.com/the-gigi/delinkcious/pkg/object_model"
+	"github.com/monazodev/delinkcious/pkg/db_util"
+	om "github.com/monazodev/delinkcious/pkg/object_model"
 	"math/rand"
 	"strconv"
 )
@@ -40,23 +40,23 @@ func NewDbUserStore(host string, port int, username string, password string) (st
 
 func createSchema(db *sql.DB) (err error) {
 	schema := `
-        CREATE TABLE IF NOT EXISTS users (
-          id SERIAL   PRIMARY KEY,
-		  name    TEXT NOT NULL,
-          email 	  TEXT UNIQUE NOT NULL
-        );
+				CREATE TABLE IF NOT EXISTS users (
+					id SERIAL   PRIMARY KEY,
+			name    TEXT NOT NULL,
+					email			TEXT UNIQUE NOT NULL
+				);
 		CREATE UNIQUE INDEX IF NOT EXISTS users_name_idx ON users(name);
 
-        CREATE TABLE IF NOT EXISTS sessions (
-          id SERIAL   PRIMARY KEY,
-          user_id     INTEGER REFERENCES users(id) ON DELETE CASCADE,
-		  session     TEXT NOT NULL,
-          created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
+				CREATE TABLE IF NOT EXISTS sessions (
+					id SERIAL   PRIMARY KEY,
+					user_id     INTEGER REFERENCES users(id) ON DELETE CASCADE,
+			session     TEXT NOT NULL,
+					created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+				);
 		CREATE UNIQUE INDEX IF NOT EXISTS sessions_user_id_idx ON sessions(user_id);
 		CREATE UNIQUE INDEX IF NOT EXISTS sessions_session_idx ON sessions(session);
 
-    `
+		`
 
 	_, err = db.Exec(schema)
 	return
